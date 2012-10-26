@@ -319,14 +319,9 @@ class scenario_risk(object):
         self.correlation_type = correlation_type
         self.vulnerability_model = vulnerability_model
 
-        self._aggregate_losses = None
-
     def __call__(self, asset, hazard):
         taxonomies = self.vulnerability_model.keys()
         vulnerability_function = self.vulnerability_model[asset.taxonomy]
-
-        if self._aggregate_losses is None:
-            self._aggregate_losses = numpy.zeros(len(hazard))
 
         loss_ratios = event_based_functions._compute_loss_ratios(
             vulnerability_function, {"IMLs": hazard}, asset,
@@ -338,11 +333,26 @@ class scenario_risk(object):
             losses = event_based_functions._compute_insured_losses(
                 asset, losses)
 
-        self._aggregate_losses += losses
-
         return output.ScenarioRiskOutput(asset, numpy.mean(losses),
-            numpy.std(losses, ddof=1))
+            numpy.std(losses, ddof=1), losses)
+
+
+class losses_aggregator(object):
+
+    def __init__(self, calculator):
+        self._aggregate_losses = None
+        self._calculator = calculator
+
+    def __call__(self, asset, hazard):
+        asset_output = self._calculator(asset, hazard)
+
+        if self._aggregate_losses is None:
+            self._aggregate_losses = numpy.zeros(len(asset_output.losses))
+
+        self._aggregate_losses += asset_output.losses
+
+        return asset_output
 
     @property
-    def aggregate_losses(self):
+    def losses(self):
         return self._aggregate_losses

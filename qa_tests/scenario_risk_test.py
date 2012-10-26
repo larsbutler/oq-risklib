@@ -26,8 +26,8 @@ from qa_tests import scenario_risk_test_data
 class ScenarioRiskTestCase(unittest.TestCase):
 
     def test_mean_based(self):
-        calculator = api.scenario_risk(
-            self._vulnerability_model_mean(), None, None)
+        calculator = api.losses_aggregator(api.scenario_risk(
+            self._vulnerability_model_mean(), None, None))
 
         asset_output = calculator(
             input.Asset("a1", "RM", 3000, None),
@@ -60,7 +60,7 @@ class ScenarioRiskTestCase(unittest.TestCase):
             asset_output.standard_deviation)
 
         total_losses = scenario.aggregate_losses(
-            [calculator.aggregate_losses])
+            [calculator.losses])
 
         self.assertAlmostEqual(246.62, total_losses[1], places=2)
         self.assertAlmostEqual(1053.09, total_losses[0], places=2)
@@ -79,8 +79,9 @@ class ScenarioRiskTestCase(unittest.TestCase):
         vulnerability_model = {"RM": vulnerability_function_rm,
             "RC": vulnerability_function_rc}
 
-        calculator = api.scenario_risk(vulnerability_model, seed=37,
-            correlation_type=None)
+        calculator = api.losses_aggregator(api.scenario_risk(
+            vulnerability_model, seed=37,
+            correlation_type=None))
 
         asset_output = calculator(
             input.Asset("a1", "RM", 3000, None),
@@ -110,7 +111,7 @@ class ScenarioRiskTestCase(unittest.TestCase):
         self.assertTrue(asset_output.standard_deviation > 259.964152622)
 
         total_losses = scenario.aggregate_losses(
-            [calculator.aggregate_losses])
+            [calculator.losses])
 
         self.assertAlmostEqual(1233.26,
             total_losses[0], delta=0.05 * 1233.26)
@@ -118,9 +119,9 @@ class ScenarioRiskTestCase(unittest.TestCase):
         self.assertTrue(total_losses[1] > 443.63)
 
     def test_insured_losses_mean(self):
-        calculator = api.scenario_risk(
+        calculator = api.losses_aggregator(api.scenario_risk(
             self._vulnerability_model_mean(),
-            None, None, insured=True)
+            None, None, insured=True))
 
         asset_output = calculator(
             input.Asset("a1", "RM", 3000, None,
@@ -153,7 +154,7 @@ class ScenarioRiskTestCase(unittest.TestCase):
             asset_output.standard_deviation)
 
         total_losses = scenario.aggregate_losses(
-            [calculator.aggregate_losses])
+            [calculator.losses])
 
         self.assertAlmostEqual(799.102578, total_losses[0], places=5)
         self.assertAlmostEqual(382.148808, total_losses[1], places=5)
