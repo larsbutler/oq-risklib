@@ -16,7 +16,7 @@
 # along with OpenQuake.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy
-from math import exp
+import math
 
 
 def bcr(eal_original, eal_retrofitted, interest_rate,
@@ -36,11 +36,11 @@ def bcr(eal_original, eal_retrofitted, interest_rate,
     * C -- Retrofitting cost
     """
     return ((eal_original - eal_retrofitted)
-            * (1 - exp(- interest_rate * asset_life_expectancy))
+            * (1 - math.exp(- interest_rate * asset_life_expectancy))
             / (interest_rate * retrofitting_cost))
 
 
-def mean_curve(curve):
+def mean_loss(curve):
     """Compute the mean loss (or loss ratio) for the given curve."""
 
     loss_ratios = curve.abscissae

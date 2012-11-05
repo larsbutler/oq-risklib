@@ -200,10 +200,10 @@ def bcr(vulnerability_model, vulnerability_model_retrofitted,
         classical_wrapped_rf = loss_curve_calculator(
             vulnerability_model_retrofitted, steps)
 
-        expected_annual_loss_original = bcr_functions.mean_curve(
+        expected_annual_loss_original = bcr_functions.mean_loss(
             classical_wrapped(asset, hazard).loss_curve)
 
-        expected_annual_loss_retrofitted = bcr_functions.mean_curve(
+        expected_annual_loss_retrofitted = bcr_functions.mean_loss(
             classical_wrapped_rf(asset, hazard).loss_curve)
 
         bcr = bcr_functions.bcr(expected_annual_loss_original,

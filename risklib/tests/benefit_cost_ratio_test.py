@@ -17,7 +17,7 @@ import unittest
 
 from risklib.curve import Curve
 from risklib.benefit_cost_ratio import (
-    bcr, mean_curve)
+    bcr, mean_loss)
 
 
 class RiskCommonTestCase(unittest.TestCase):
@@ -41,4 +41,4 @@ class RiskCommonTestCase(unittest.TestCase):
                 (0.24, 0.019), (0.3, 0.009), (0.45, 0)])
 
         self.assertAlmostEqual(0.023305,
-                               mean_curve(loss_ratio_curve), 3)
+                               mean_loss(loss_ratio_curve), 3)
