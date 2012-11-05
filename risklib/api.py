@@ -184,8 +184,9 @@ def conditional_losses(conditional_loss_poes, loss_curve_calculator):
     return conditional_losses_wrapped
 
 
-def bcr(loss_curve_calculator_original, loss_curve_calculator_retrofitted,
-    interest_rate, asset_life_expectancy):
+def bcr(vulnerability_model, vulnerability_model_retrofitted,
+        interest_rate, asset_life_expectancy,
+        steps=10, loss_curve_calculator=classical):
     """
     Compute the Benefit Cost Ratio. For each asset, it produces:
         * the benefit cost ratio
@@ -194,11 +195,16 @@ def bcr(loss_curve_calculator_original, loss_curve_calculator_retrofitted,
     """
 
     def bcr_wrapped(asset, hazard):
+
+        classical_wrapped = loss_curve_calculator(vulnerability_model, steps)
+        classical_wrapped_rf = loss_curve_calculator(
+            vulnerability_model_retrofitted, steps)
+
         expected_annual_loss_original = bcr_functions._mean_loss(
-            loss_curve_calculator_original(asset, hazard).loss_curve)
+            classical_wrapped(asset, hazard).loss_curve)
 
         expected_annual_loss_retrofitted = bcr_functions._mean_loss(
-            loss_curve_calculator_retrofitted(asset, hazard).loss_curve)
+            classical_wrapped_rf(asset, hazard).loss_curve)
 
         bcr = bcr_functions._bcr(expected_annual_loss_original,
             expected_annual_loss_retrofitted, interest_rate,

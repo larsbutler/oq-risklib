@@ -173,8 +173,8 @@ class BCRCalculatorTestCase(unittest.TestCase):
         vulnerability_model = {"RC": function}
         vulnerability_model_retrofitted = {"RC": function}
 
-        asset_output = (api.bcr(api.classical(vulnerability_model),
-            api.classical(vulnerability_model_retrofitted), 1.0, 1.0)
+        asset_output = (api.bcr(vulnerability_model,
+            vulnerability_model_retrofitted, 1.0, 1.0)
             (asset, hazard_curve))
 
         self.assertEquals(asset, asset_output.asset)

@@ -38,12 +38,10 @@ class BCRTestCase(unittest.TestCase):
         vulnerability_model_rf = {"VF": vulnerability_function_rf}
 
         asset = input.Asset("a1", "VF", 2, None, retrofitting_cost=0.1)
-
-        calculator_rm = api.classical(vulnerability_model_rm, steps=5)
-        calculator_rf = api.classical(vulnerability_model_rf, steps=5)
-
-        calculator_bcr = api.bcr(calculator_rm, calculator_rf,
-            interest_rate=0.05, asset_life_expectancy=40)
+        
+        calculator_bcr = api.bcr(vulnerability_model_rm,
+            vulnerability_model_rf, interest_rate=0.05,
+            asset_life_expectancy=40)
 
         hazard = [
             (0.001, 0.0398612669790014), (0.01, 0.0398612669790014),
