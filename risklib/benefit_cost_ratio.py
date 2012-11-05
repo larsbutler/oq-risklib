@@ -20,7 +20,8 @@ import math
 
 
 def bcr(eal_original, eal_retrofitted, interest_rate,
-                asset_life_expectancy, retrofitting_cost):
+        asset_life_expectancy, retrofitting_cost):
+
     """
     Compute the Benefit-Cost Ratio.
 
@@ -35,25 +36,29 @@ def bcr(eal_original, eal_retrofitted, interest_rate,
     * t -- Life expectancy of the asset
     * C -- Retrofitting cost
     """
+
     return ((eal_original - eal_retrofitted)
-            * (1 - math.exp(- interest_rate * asset_life_expectancy))
-            / (interest_rate * retrofitting_cost))
+        * (1 - math.exp(- interest_rate * asset_life_expectancy))
+        / (interest_rate * retrofitting_cost))
 
 
 def mean_loss(curve):
-    """Compute the mean loss (or loss ratio) for the given curve."""
+    """
+    Compute the mean loss (or loss ratio) for the given curve.
+    """
 
-    loss_ratios = curve.abscissae
     pes = curve.ordinates
+    loss_ratios = curve.abscissae
 
-    ratios = [numpy.mean([x, y])
-          for x, y in zip(loss_ratios, loss_ratios[1:])]
+    mean_loss_ratios = [numpy.mean([x, y])
+        for x, y in zip(loss_ratios, loss_ratios[1:])]
+
     mid_pes = [numpy.mean([x, y])
-           for x, y in zip(pes, pes[1:])]
+        for x, y in zip(pes, pes[1:])]
 
-    ratios = [numpy.mean([x, y])
-          for x, y in zip(ratios, ratios[1:])]
+    mean_loss_ratios = [numpy.mean([x, y])
+        for x, y in zip(mean_loss_ratios, mean_loss_ratios[1:])]
 
     mid_pes = [x - y for x, y in zip(mid_pes, mid_pes[1:])]
 
-    return sum(i * j for i, j in zip(ratios, mid_pes))
+    return sum(i * j for i, j in zip(mean_loss_ratios, mid_pes))
