@@ -18,23 +18,8 @@
 import numpy
 from math import exp
 
-from risklib.curve import Curve
-from risklib.classical import _loss_ratio_curve, _loss_curve
 
-
-def _expected_annual_loss(
-        asset, vulnerability_model, loss_ratio_exceedance_matrices,
-                 hazard_curve, steps):
-    vulnerability_function = vulnerability_model[asset.taxonomy]
-    loss_ratio_curve = _loss_ratio_curve(
-        vulnerability_function,
-        loss_ratio_exceedance_matrices[asset.taxonomy],
-        hazard_curve, steps)
-    loss_curve = _loss_curve(loss_ratio_curve, asset.value)
-    return _mean_loss(loss_curve)
-
-
-def _bcr(eal_original, eal_retrofitted, interest_rate,
+def bcr(eal_original, eal_retrofitted, interest_rate,
                 asset_life_expectancy, retrofitting_cost):
     """
     Compute the Benefit-Cost Ratio.
@@ -55,34 +40,20 @@ def _bcr(eal_original, eal_retrofitted, interest_rate,
             / (interest_rate * retrofitting_cost))
 
 
-def _mean_loss(curve):
+def mean_curve(curve):
     """Compute the mean loss (or loss ratio) for the given curve."""
 
-    mid_curve = _mean_loss_ratio_curve(curve)
-    return sum(i * j for i, j in zip(
-            mid_curve.abscissae, mid_curve.ordinates))
-
-
-def _mean_loss_ratio_curve(loss_ratio_curve):
-    """Compute a loss ratio curve that has PoOs
-    (Probabilities of Occurrence) as Y values."""
-
-    loss_ratios = loss_ratio_curve.abscissae
-    pes = loss_ratio_curve.ordinates
+    loss_ratios = curve.abscissae
+    pes = curve.ordinates
 
     ratios = [numpy.mean([x, y])
-              for x, y in zip(loss_ratios, loss_ratios[1:])]
+          for x, y in zip(loss_ratios, loss_ratios[1:])]
     mid_pes = [numpy.mean([x, y])
-              for x, y in zip(pes, pes[1:])]
-
-    loss_ratio_pe_mid_curve = Curve(zip(ratios, mid_pes))
-
-    loss_ratios = loss_ratio_pe_mid_curve.abscissae
-    pes = loss_ratio_pe_mid_curve.ordinates
+           for x, y in zip(pes, pes[1:])]
 
     ratios = [numpy.mean([x, y])
-              for x, y in zip(loss_ratios, loss_ratios[1:])]
+          for x, y in zip(ratios, ratios[1:])]
 
-    pos = [x - y for x, y in zip(pes, pes[1:])]
+    mid_pes = [x - y for x, y in zip(mid_pes, mid_pes[1:])]
 
-    return Curve(zip(ratios, pos))
+    return sum(i * j for i, j in zip(ratios, mid_pes))
