@@ -99,7 +99,7 @@ def compute_on_assets(assets, hazard_getter, calculator):
         yield calculator(asset, hazard)
 
 
-def classical(vulnerability_model, steps=10):
+def classical(vulnerability_model, calc_args):
     """
     Classical calculator. For each asset it produces:
         * a loss curve
@@ -109,14 +109,15 @@ def classical(vulnerability_model, steps=10):
 
     matrices = dict([(taxonomy,
         classical_functions._loss_ratio_exceedance_matrix(
-        vulnerability_function, steps))
+        vulnerability_function, calc_args['steps']))
         for taxonomy, vulnerability_function in vulnerability_model.items()])
 
     def classical_wrapped(asset, hazard):
         vulnerability_function = vulnerability_model[asset.taxonomy]
 
         loss_ratio_curve = classical_functions._loss_ratio_curve(
-            vulnerability_function, matrices[asset.taxonomy], hazard, steps)
+            vulnerability_function, matrices[asset.taxonomy], hazard,
+            calc_args['steps'])
 
         loss_curve = classical_functions._loss_curve(
             loss_ratio_curve, asset.value)
@@ -183,10 +184,10 @@ def conditional_losses(conditional_loss_poes, loss_curve_calculator):
 
     return conditional_losses_wrapped
 
-
+# calc args = interest_rate, asset_life_expectancy, steps (classical)
+# calc args = interest_rate, asset_life_expectancy
 def bcr(vulnerability_model, vulnerability_model_retrofitted,
-        interest_rate, asset_life_expectancy,
-        steps=10, loss_curve_calculator=classical):
+        calc_args, loss_curve_calculator):
     """
     Compute the Benefit Cost Ratio. For each asset, it produces:
         * the benefit cost ratio
@@ -196,9 +197,10 @@ def bcr(vulnerability_model, vulnerability_model_retrofitted,
 
     def bcr_wrapped(asset, hazard):
 
-        classical_wrapped = loss_curve_calculator(vulnerability_model, steps)
+        classical_wrapped = loss_curve_calculator(
+            vulnerability_model, calc_args)
         classical_wrapped_rf = loss_curve_calculator(
-            vulnerability_model_retrofitted, steps)
+            vulnerability_model_retrofitted, calc_args)
 
         expected_annual_loss_original = bcr_functions.mean_loss(
             classical_wrapped(asset, hazard).loss_curve)
@@ -207,8 +209,8 @@ def bcr(vulnerability_model, vulnerability_model_retrofitted,
             classical_wrapped_rf(asset, hazard).loss_curve)
 
         bcr = bcr_functions.bcr(expected_annual_loss_original,
-            expected_annual_loss_retrofitted, interest_rate,
-            asset_life_expectancy, asset.retrofitting_cost)
+            expected_annual_loss_retrofitted, calc_args['interest_rate'],
+            calc_args['asset_life_expectancy'], asset.retrofitting_cost)
 
         return output.BCROutput(
             asset, bcr, expected_annual_loss_original,

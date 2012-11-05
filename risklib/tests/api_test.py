@@ -126,7 +126,9 @@ class ClassicalCalculatorTestCase(unittest.TestCase):
             [0.1, 0.2], [1.0, 0.5], [0.0, 0.0], "LN")
 
         vulnerability_model = {"RC": function}
-        asset_output = api.classical(vulnerability_model)(asset, hazard_curve)
+        calc_args = {'steps': 10}
+        asset_output = api.classical(vulnerability_model, calc_args)(asset,
+            hazard_curve)
 
         self.assertEquals(asset, asset_output.asset)
 
@@ -172,9 +174,11 @@ class BCRCalculatorTestCase(unittest.TestCase):
 
         vulnerability_model = {"RC": function}
         vulnerability_model_retrofitted = {"RC": function}
-
+        calc_args = {'interest_rate': 1.0,
+                     'asset_life_expectancy': 1.0,
+                     'steps': 10}
         asset_output = (api.bcr(vulnerability_model,
-            vulnerability_model_retrofitted, 1.0, 1.0)
+            vulnerability_model_retrofitted, calc_args, api.classical)
             (asset, hazard_curve))
 
         self.assertEquals(asset, asset_output.asset)
