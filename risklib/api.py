@@ -277,7 +277,7 @@ def insured_losses(losses_calculator):
         asset_output = losses_calculator(asset, hazard)
 
         return asset_output._replace(
-            insured_losses=insured_loss._compute_insured_losses(
+            insured_losses=insured_loss.compute_insured_losses(
             asset, asset_output.losses))
 
     return insured_losses_wrapped
@@ -294,7 +294,7 @@ def insured_curves(vulnerability_model, insured_losses_calculator, args_dict):
         vulnerability_function = vulnerability_model[asset.taxonomy]
 
         insured_loss_ratio_curve = (
-            insured_loss._compute_insured_loss_ratio_curve(
+            insured_loss.compute_insured_loss_ratio_curve(
             vulnerability_function, hazard, asset,
                 args_dict['loss_histogram_bins'],
             asset_output.insured_losses, args_dict['seed'],
@@ -343,7 +343,7 @@ class ScenarioRisk(object):
         losses = loss_ratios * asset.value
 
         if self.insured:
-            losses = insured_loss._compute_insured_losses(
+            losses = insured_loss.compute_insured_losses(
                 asset, losses)
 
         self._aggregate_losses += losses
