@@ -61,4 +61,4 @@ def mean_loss(curve):
 
     mid_pes = [x - y for x, y in zip(mid_pes, mid_pes[1:])]
 
-    return sum(i * j for i, j in zip(mean_loss_ratios, mid_pes))
+    return numpy.dot(mean_loss_ratios, mid_pes)
