@@ -170,7 +170,7 @@ class ScenarioDamage(object):
         return self._fractions_per_taxonomy
 
 
-def conditional_losses(args_dict, loss_curve_calculator):
+def conditional_losses(loss_curve_calculator, args_dict):
     """
     Compute the conditional losses for each Probability
     of Exceedance given as input.
@@ -187,7 +187,7 @@ def conditional_losses(args_dict, loss_curve_calculator):
 
 
 def bcr(vulnerability_model, vulnerability_model_retrofitted,
-        args_dict, loss_curve_calculator):
+        loss_curve_calculator, args_dict):
     """
     Compute the Benefit Cost Ratio. For each asset, it produces:
         * the benefit cost ratio
@@ -230,8 +230,7 @@ class ProbabilisticEventBased(object):
         * aggregate loss curve
     """
 
-    def __init__(self, vulnerability_model,
-                 args_dict):
+    def __init__(self, vulnerability_model, args_dict):
 
         self.seed = args_dict['seed']
         self.correlation_type = args_dict['correlation_type']
@@ -283,7 +282,7 @@ def insured_losses(losses_calculator):
     return insured_losses_wrapped
 
 
-def insured_curves(vulnerability_model, args_dict, insured_losses_calculator):
+def insured_curves(vulnerability_model, insured_losses_calculator, args_dict):
     """
     Insured (loss ratio / loss) curves calculator.
     """

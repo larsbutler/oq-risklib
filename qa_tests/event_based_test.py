@@ -203,7 +203,7 @@ class EventBasedTestCase(unittest.TestCase):
             vulnerability_model, args_dict)
 
         peb_conditional_losses = api.conditional_losses(
-            args_dict, peb_calculator)
+            peb_calculator, args_dict)
 
         for i in range(3):
             asset_output = peb_conditional_losses(
@@ -274,7 +274,7 @@ class EventBasedTestCase(unittest.TestCase):
         peb_calculator = api.ProbabilisticEventBased(
             vulnerability_model, args_dict)
         peb_conditional_losses = api.conditional_losses(
-            args_dict, peb_calculator)
+            peb_calculator, args_dict)
 
         for i in range(3):
             asset_output = peb_conditional_losses(
@@ -323,10 +323,10 @@ class EventBasedTestCase(unittest.TestCase):
         peb_calculator = api.ProbabilisticEventBased(
             vulnerability_model, args_dict)
         peb_conditional_losses = api.conditional_losses(
-            args_dict, peb_calculator)
+            peb_calculator, args_dict)
         peb_insured_losses = api.insured_losses(peb_conditional_losses)
         peb_insured_curves = api.insured_curves(
-            vulnerability_model, args_dict, peb_insured_losses)
+            vulnerability_model, peb_insured_losses, args_dict)
 
         for i in range(3):
             asset_output = peb_insured_curves(

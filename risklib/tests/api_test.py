@@ -106,7 +106,7 @@ class ConditionalLossesTestCase(unittest.TestCase):
             args_dict = {'conditional_loss_poes': [0.1, 0.2]}
 
             asset_output = api.conditional_losses(
-                args_dict, loss_curve_calculator)(asset, 1.0)
+                loss_curve_calculator, args_dict    )(asset, 1.0)
 
             loss_curve_calculator.assert_called_with(asset, 1.0)
 
@@ -180,7 +180,7 @@ class BCRCalculatorTestCase(unittest.TestCase):
                      'asset_life_expectancy': 1.0,
                      'steps': 10}
         asset_output = (api.bcr(vulnerability_model,
-            vulnerability_model_retrofitted, args_dict, api.Classical)
+            vulnerability_model_retrofitted, api.Classical, args_dict)
             (asset, hazard_curve))
 
         self.assertEquals(asset, asset_output.asset)
@@ -271,8 +271,8 @@ class InsuredCurvesTestCase(unittest.TestCase):
                          'seed': 37,
                          'correlation_type': "perfect"}
 
-            asset_output = api.insured_curves(vulnerability_model, args_dict,
-                insured_losses_calculator)(asset, hazard)
+            asset_output = api.insured_curves(vulnerability_model,
+                insured_losses_calculator, args_dict)(asset, hazard)
 
             insured_losses_calculator.assert_called_with(asset, hazard)
 
