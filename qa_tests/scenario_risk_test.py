@@ -60,7 +60,7 @@ class ScenarioRiskTestCase(unittest.TestCase):
                      'correlation_type': None,
                      'insured': False}
 
-        calculator = api.scenario_risk(
+        calculator = api.ScenarioRisk(
             self.vulnerability_model_mean, args_dict)
 
         asset_output = calculator(
@@ -109,7 +109,7 @@ class ScenarioRiskTestCase(unittest.TestCase):
                      'correlation_type': None,
                      'insured': False}
 
-        calculator = api.scenario_risk(vulnerability_model, args_dict)
+        calculator = api.ScenarioRisk(vulnerability_model, args_dict)
 
         asset_output = calculator(
             input.Asset("a1", "RM", 3000, None), gmv.a1)
@@ -148,7 +148,7 @@ class ScenarioRiskTestCase(unittest.TestCase):
                      'seed': None,
                      'insured': True}
 
-        calculator = api.scenario_risk(
+        calculator = api.ScenarioRisk(
             self.vulnerability_model_mean, args_dict)
 
         asset_output = calculator(

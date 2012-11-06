@@ -129,7 +129,7 @@ class ClassicalCalculatorTestCase(unittest.TestCase):
 
         vulnerability_model = {"RC": function}
         args_dict = {'steps': 10}
-        asset_output = api.classical(vulnerability_model, args_dict)(asset,
+        asset_output = api.Classical(vulnerability_model, args_dict)(asset,
             hazard_curve)
 
         self.assertEquals(asset, asset_output.asset)
@@ -151,7 +151,7 @@ class ScenarioDamageCalculatorTestCase(unittest.TestCase):
 
         asset = input.Asset("a1", "RC", None, None, number_of_units=1.0)
 
-        calculator = api.scenario_damage(fragility_model,
+        calculator = api.ScenarioDamage(fragility_model,
             {"RC": [fragility_function]})
 
         asset_output = calculator(asset, [0.11, 0.12, 0.13])
@@ -180,7 +180,7 @@ class BCRCalculatorTestCase(unittest.TestCase):
                      'asset_life_expectancy': 1.0,
                      'steps': 10}
         asset_output = (api.bcr(vulnerability_model,
-            vulnerability_model_retrofitted, args_dict, api.classical)
+            vulnerability_model_retrofitted, args_dict, api.Classical)
             (asset, hazard_curve))
 
         self.assertEquals(asset, asset_output.asset)
@@ -207,7 +207,7 @@ class ProbabilisticEventBasedCalculatorTestCase(unittest.TestCase):
                      'seed': 37,
                      'correlation_type': "perfect"}
 
-        asset_output = api.probabilistic_event_based(
+        asset_output = api.ProbabilisticEventBased(
             vulnerability_model, args_dict)(asset, hazard)
 
         self.assertEquals(asset, asset_output.asset)
@@ -303,7 +303,7 @@ class ScenarioRiskCalculatorTestCase(unittest.TestCase):
                      'correlation_type': "perfect",
                      'insured': False}
 
-        asset_output = api.scenario_risk(
+        asset_output = api.ScenarioRisk(
             vulnerability_model, args_dict)(asset, hazard)
 
         self.assertEquals(asset, asset_output.asset)
@@ -316,7 +316,7 @@ class ScenarioRiskCalculatorTestCase(unittest.TestCase):
         args_dict['seed'] = True
 
         # same, but with an insured calculator
-        asset_output = api.scenario_risk(
+        asset_output = api.ScenarioRisk(
             vulnerability_model, args_dict)(asset, hazard)
 
         self.assertEquals(asset, asset_output.asset)

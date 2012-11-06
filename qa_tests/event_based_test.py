@@ -199,7 +199,7 @@ class EventBasedTestCase(unittest.TestCase):
                      'seed': None,
                      'correlation_type': None}
 
-        peb_calculator = api.probabilistic_event_based(
+        peb_calculator = api.ProbabilisticEventBased(
             vulnerability_model, args_dict)
 
         peb_conditional_losses = api.conditional_losses(
@@ -271,7 +271,7 @@ class EventBasedTestCase(unittest.TestCase):
                      'seed': None,
                      'correlation_type': None}
 
-        peb_calculator = api.probabilistic_event_based(
+        peb_calculator = api.ProbabilisticEventBased(
             vulnerability_model, args_dict)
         peb_conditional_losses = api.conditional_losses(
             args_dict, peb_calculator)
@@ -320,7 +320,7 @@ class EventBasedTestCase(unittest.TestCase):
                      'loss_histogram_bins': 10,
                      'conditional_loss_poes': [0.99]}
 
-        peb_calculator = api.probabilistic_event_based(
+        peb_calculator = api.ProbabilisticEventBased(
             vulnerability_model, args_dict)
         peb_conditional_losses = api.conditional_losses(
             args_dict, peb_calculator)
