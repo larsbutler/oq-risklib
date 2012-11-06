@@ -21,6 +21,7 @@ from risklib import classical as classical_functions
 from risklib import event_based as event_based_functions
 from risklib import benefit_cost_ratio as bcr_functions
 from risklib import scenario_damage as scenario_damage_functions
+from risklib import insured_loss
 
 
 def compute_on_sites(sites, assets_getter, hazard_getter, calculator):
@@ -276,7 +277,7 @@ def insured_losses(losses_calculator):
         asset_output = losses_calculator(asset, hazard)
 
         return asset_output._replace(
-            insured_losses=event_based_functions._compute_insured_losses(
+            insured_losses=insured_loss._compute_insured_losses(
             asset, asset_output.losses))
 
     return insured_losses_wrapped
@@ -293,7 +294,7 @@ def insured_curves(vulnerability_model, insured_losses_calculator, args_dict):
         vulnerability_function = vulnerability_model[asset.taxonomy]
 
         insured_loss_ratio_curve = (
-            event_based_functions._compute_insured_loss_ratio_curve(
+            insured_loss._compute_insured_loss_ratio_curve(
             vulnerability_function, hazard, asset,
                 args_dict['loss_histogram_bins'],
             asset_output.insured_losses, args_dict['seed'],
@@ -342,7 +343,7 @@ class ScenarioRisk(object):
         losses = loss_ratios * asset.value
 
         if self.insured:
-            losses = event_based_functions._compute_insured_losses(
+            losses = insured_loss._compute_insured_losses(
                 asset, losses)
 
         self._aggregate_losses += losses

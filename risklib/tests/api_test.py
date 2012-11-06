@@ -231,7 +231,8 @@ class InsuredLossesTestCase(unittest.TestCase):
 
         losses_calculator = mock.Mock(return_value=asset_output)
 
-        with mock.patch("risklib.event_based._compute_insured_losses") as stub:
+        with mock.patch(
+            "risklib.insured_loss._compute_insured_losses") as stub:
             stub.return_value = [0.5, 0.5, 0.5]
 
             asset_output = api.insured_losses(losses_calculator)(asset, hazard)
@@ -260,7 +261,7 @@ class InsuredCurvesTestCase(unittest.TestCase):
         insured_losses_calculator = mock.Mock(return_value=asset_output)
 
         with mock.patch(
-            "risklib.event_based._compute_insured_loss_ratio_curve") as stub:
+            "risklib.insured_loss._compute_insured_loss_ratio_curve") as stub:
 
             insured_loss_ratio_curve = curve.Curve(
                 [(0.5, 1.0), (0.5, 1.0), (0.5, 1.0)])
