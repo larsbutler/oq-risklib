@@ -194,10 +194,16 @@ class EventBasedTestCase(unittest.TestCase):
         vulnerability_model = {"RM": vulnerability_function_rm,
                                "RC": vulnerability_function_rc}
 
-        peb_calculator = api.probabilistic_event_based(
-            vulnerability_model, 10, None, None)
+        args_dict = {'conditional_loss_poes': [0.99],
+                     'loss_histogram_bins': 10,
+                     'seed': None,
+                     'correlation_type': None}
 
-        peb_conditional_losses = api.conditional_losses([0.99], peb_calculator)
+        peb_calculator = api.probabilistic_event_based(
+            vulnerability_model, args_dict)
+
+        peb_conditional_losses = api.conditional_losses(
+            args_dict, peb_calculator)
 
         for i in range(3):
             asset_output = peb_conditional_losses(
@@ -260,9 +266,15 @@ class EventBasedTestCase(unittest.TestCase):
         vulnerability_model = {"RM": vulnerability_function_rm,
                                "RC": vulnerability_function_rc}
 
+        args_dict = {'conditional_loss_poes': [0.99],
+                     'loss_histogram_bins': 10,
+                     'seed': None,
+                     'correlation_type': None}
+
         peb_calculator = api.probabilistic_event_based(
-            vulnerability_model, 10, None, None)
-        peb_conditional_losses = api.conditional_losses([0.99], peb_calculator)
+            vulnerability_model, args_dict)
+        peb_conditional_losses = api.conditional_losses(
+            args_dict, peb_calculator)
 
         for i in range(3):
             asset_output = peb_conditional_losses(
@@ -303,12 +315,18 @@ class EventBasedTestCase(unittest.TestCase):
         vulnerability_model = {"RM": vulnerability_function_rm,
                                "RC": vulnerability_function_rc}
 
+        args_dict = {'seed': None,
+                     'correlation_type': None,
+                     'loss_histogram_bins': 10,
+                     'conditional_loss_poes': [0.99]}
+
         peb_calculator = api.probabilistic_event_based(
-            vulnerability_model, 10, None, None)
-        peb_conditional_losses = api.conditional_losses([0.99], peb_calculator)
+            vulnerability_model, args_dict)
+        peb_conditional_losses = api.conditional_losses(
+            args_dict, peb_calculator)
         peb_insured_losses = api.insured_losses(peb_conditional_losses)
         peb_insured_curves = api.insured_curves(
-            vulnerability_model, 10, None, None, peb_insured_losses)
+            vulnerability_model, args_dict, peb_insured_losses)
 
         for i in range(3):
             asset_output = peb_insured_curves(
