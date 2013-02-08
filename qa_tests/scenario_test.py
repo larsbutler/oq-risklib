@@ -18,9 +18,9 @@
 import os
 import unittest
 
-from openquake.risklib import api
-from openquake.risklib import scientific
-from openquake.risklib.tests.utils import vectors_from_csv
+from oqrisklib import api
+from oqrisklib import scientific
+from oqrisklib.tests.utils import vectors_from_csv
 
 THISDIR = os.path.dirname(__file__)
 

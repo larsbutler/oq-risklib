@@ -17,9 +17,9 @@
 
 import unittest
 import numpy
-from openquake.risklib import api
-from openquake.risklib import scientific
-from openquake.risklib.models import input
+from oqrisklib import api
+from oqrisklib import scientific
+from oqrisklib.models import input
 
 
 # FIXME(lp) remove this. it is just using the default args

@@ -16,6 +16,6 @@
 # <http://www.gnu.org/licenses/>.
 
 
-from openquake.risklib.models import input
+from oqrisklib.models import input
 
 __all__ = [input.__name__]  # ugly

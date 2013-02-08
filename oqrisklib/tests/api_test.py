@@ -18,10 +18,10 @@
 import mock
 import unittest
 
-from openquake.risklib.models import input
-from openquake.risklib import scientific
-from openquake.risklib.curve import Curve
-from openquake.risklib import api
+from oqrisklib.models import input
+from oqrisklib import scientific
+from oqrisklib.curve import Curve
+from oqrisklib import api
 
 
 class ConditionalLossesTestCase(unittest.TestCase):

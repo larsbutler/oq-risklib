@@ -29,7 +29,7 @@ url = "http://github.com/gem/oq-risklib"
 
 
 setup(
-    name='openquake.risklib',
+    name='oqrisklib',
     version=version,
     description="oq-risklib is a library for performing seismic risk analysis",
     long_description=__doc__,
