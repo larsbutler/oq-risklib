@@ -53,7 +53,6 @@ setup(
     keywords="seismic risk",
     license="GNU AGPL v3",
     platforms=["any"],
-    namespace_packages=['openquake'],
 
     zip_safe=False,
 )
